@@ -1,24 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
-import { cn } from '@/lib/utils';
-import { Button, buttonVariants } from "@/components/ui/button"
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
 ---
 
 <Layout title="Welcome to Astro.">
-	<main>
-			<a class={buttonVariants({ variant: "default" })} href="/logParser">To the Log Parser</a>
-	</main>
+  <main>
+    <a
+      class={buttonVariants({ variant: "default", size: "lg" })}
+      href="/logParser">To the Log Parser</a
+    >
+  </main>
 </Layout>
-
-
-<style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		font-size: 20px;
-		line-height: 1.6;
-	}
-</style>

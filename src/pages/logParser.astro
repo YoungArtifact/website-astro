@@ -1,29 +1,38 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { Input } from "@/components/ui/input";
 
+// import log from "../../public/log (bb69cd9d4f6642199eacf55b663b7b44).txt";
 ---
 
 <Layout title="Log Parser">
-    <main>
-        <h1>hi</h1>
-    </main>
+  <main>
+    <h1>hi</h1>
+
+    <Input id="log" type="file" />
+  </main>
 </Layout>
 
-<style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		font-size: 20px;
-		line-height: 1.6;
-	}
+<script>
+  const logInput = document.querySelector("#log");
+  console.log(logInput.files.item(0));
+</script>
 
-	h1 {
-		font-size: 4rem;
-		font-weight: 700;
-		line-height: 1;
-		text-align: center;
-		margin-bottom: 1em;
-	}
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 1em;
+  }
 </style>
