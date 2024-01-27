@@ -1,28 +1,112 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-// import log from "../../public/log (bb69cd9d4f6642199eacf55b663b7b44).txt";
+import log from "../../public/log (3c6dfdde99be46f291e9d1a6502dfb25).txt?raw";
+
+const lines = log.split(/\n/g);
+
+let tempLine_list = [];
+let tempLine_listLength = 0;
+
+for (let line in lines) {
+  let tempLine = lines[Number(line)];
+  let prevLine = lines[Number(line) - 1];
+  let nextLine = lines[Number(line) + 1];
+  let wholeLine: String = "";
+
+  //* skip line if it is empty
+  if (tempLine.length == 0) {
+    continue;
+  }
+
+  //* add lines without intro to previous message
+  wholeLine = tempLine;
+
+  let nextCount = 1;
+  while (nextLine.startsWith(" ")) {
+    nextLine = lines[Number(line) + nextCount];
+    nextCount++;
+    tempLine = tempLine + "<br />" + nextLine;
+    wholeLine = tempLine;
+  }
+
+  //* seperating each line into time, level, screen and message
+  let tempLine_split = wholeLine.split(
+    /^\[(?<time>\d\d[:\.]\d\d[:\.]\d\d) (?<level>[a-z]+)(?: +screen_(?<screen>\d+))? +(?<modName>[^\]]+)\]/i
+  );
+
+  if (tempLine_split[1] == undefined) {
+    continue;
+  }
+
+  let time = tempLine_split[1];
+  let level = tempLine_split[2];
+  let screen = tempLine_split[3];
+  let subject = tempLine_split[4];
+  let message = tempLine_split[5];
+
+  let tempLine_object = {
+    time: time,
+    level: level,
+    subject: subject,
+    message: message,
+  };
+
+  // console.log(tempLine_split)
+
+  tempLine_listLength = tempLine_list.push(tempLine_object);
+}
 ---
 
 <Layout title="Log Parser">
   <main>
     <h1>hi</h1>
-
     <Input id="log" type="file" />
+    <Table>
+      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">TIME</TableHead>
+          <TableHead>LEVEL</TableHead>
+          <TableHead>SUBJECT</TableHead>
+          <TableHead>Message</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {
+          tempLine_list.map((item) => (
+            <TableRow>
+              <TableCell className="font-medium">{item.time}</TableCell>
+              <TableCell>{item.level}</TableCell>
+              <TableCell>{item.subject}</TableCell>
+              <TableCell>
+                <Fragment set:html={item.message} />
+              </TableCell>
+            </TableRow>
+          ))
+        }
+      </TableBody>
+    </Table>
   </main>
 </Layout>
 
-<script>
-  const logInput = document.querySelector("#log");
-  console.log(logInput.files.item(0));
-</script>
+<script></script>
 
 <style>
   main {
     margin: auto;
     padding: 1rem;
-    width: 800px;
+    width: 90%;
     max-width: calc(100% - 2rem);
     font-size: 20px;
     line-height: 1.6;
