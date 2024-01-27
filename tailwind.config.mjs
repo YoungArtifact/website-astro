@@ -48,6 +48,11 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        TRACE: "hsl(var(--TRACE))",
+        WARN: "hsl(var(--WARN))",
+        DEBUG: "hsl(var(--DEBUG))",
+        ALERT: "hsl(var(--ALERT))",
+        ERROR: "hsl(var(--ERROR))",
       },
       borderRadius: {
         lg: "var(--radius)",

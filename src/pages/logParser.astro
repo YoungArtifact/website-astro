@@ -35,6 +35,9 @@ for (let line in lines) {
   let nextCount = 1;
   while (nextLine.startsWith(" ")) {
     nextLine = lines[Number(line) + nextCount];
+    if (nextLine.startsWith("[")) {
+      continue;
+    }
     nextCount++;
     tempLine = tempLine + "<br />" + nextLine;
     wholeLine = tempLine;
@@ -62,8 +65,6 @@ for (let line in lines) {
     message: message,
   };
 
-  // console.log(tempLine_split)
-
   tempLine_listLength = tempLine_list.push(tempLine_object);
 }
 ---
@@ -85,8 +86,8 @@ for (let line in lines) {
       <TableBody>
         {
           tempLine_list.map((item) => (
-            <TableRow>
-              <TableCell className="font-medium">{item.time}</TableCell>
+            <TableRow className={`text-${item.level}`}>
+              <TableCell>{item.time}</TableCell>
               <TableCell>{item.level}</TableCell>
               <TableCell>{item.subject}</TableCell>
               <TableCell>
