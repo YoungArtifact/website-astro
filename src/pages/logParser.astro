@@ -74,7 +74,6 @@ for (let line in lines) {
     <h1>hi</h1>
     <Input id="log" type="file" />
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">TIME</TableHead>
@@ -119,5 +118,21 @@ for (let line in lines) {
     line-height: 1;
     text-align: center;
     margin-bottom: 1em;
+  }
+
+  .text-TRACE {
+    color: hsl(var(--TRACE));
+  }
+  .text-DEBUG {
+    color: hsl(var(--DEBUG));
+  }
+  .text-WARN {
+    color: hsl(var(--WARN));
+  }
+  .text-ALERT {
+    color: hsl(var(--WARN));
+  }
+  .text-ERROR {
+    color: hsl(var(--ERROR));
   }
 </style>
