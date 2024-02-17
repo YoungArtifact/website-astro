@@ -1,22 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { type ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/ui/data-table";
 
 import log from "../../public/log (3c6dfdde99be46f291e9d1a6502dfb25).txt?raw";
 
+type line = {
+  time: string;
+  level: string;
+  subject: string;
+  message: string;
+};
+
+const columns: ColumnDef<line>[] = [
+  { header: "Time", accessorKey: "time" },
+  { header: "Level", accessorKey: "level" },
+  { header: "Subject", accessorKey: "subject" },
+  { header: "Message", accessorKey: "message" },
+];
+
 const lines = log.split(/\n/g);
 
-let tempLine_list = [];
-let tempLine_listLength = 0;
+let tempLine_list: line[] = [];
 
 for (let line in lines) {
   let tempLine = lines[Number(line)];
@@ -65,38 +71,22 @@ for (let line in lines) {
     message: message,
   };
 
-  tempLine_listLength = tempLine_list.push(tempLine_object);
+  tempLine_list.push(tempLine_object);
 }
 ---
 
 <Layout title="Log Parser">
   <main>
     <h1>hi</h1>
-    <Input id="log" type="file" />
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">TIME</TableHead>
-          <TableHead>LEVEL</TableHead>
-          <TableHead>SUBJECT</TableHead>
-          <TableHead>Message</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {
-          tempLine_list.map((item) => (
-            <TableRow className={`text-${item.level}`}>
-              <TableCell>{item.time}</TableCell>
-              <TableCell>{item.level}</TableCell>
-              <TableCell>{item.subject}</TableCell>
-              <TableCell>
-                <Fragment set:html={item.message} />
-              </TableCell>
-            </TableRow>
-          ))
-        }
-      </TableBody>
-    </Table>
+    <Input
+      id="log"
+      type="file"
+    />
+
+    <DataTable
+      columns={columns}
+      data={tempLine_list}
+    />
   </main>
 </Layout>
 
