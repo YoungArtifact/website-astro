@@ -44,6 +44,8 @@
     --ALERT: 16 100% 50%;
 
     --ERROR: 0 100% 50%;
+
+    --CRITICAL: 0 100% 50%;
   }
   .dark  {
     --background: 89.3 19% 10%;

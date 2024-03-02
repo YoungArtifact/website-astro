@@ -53,6 +53,7 @@ module.exports = {
         DEBUG: "hsl(var(--DEBUG))",
         ALERT: "hsl(var(--ALERT))",
         ERROR: "hsl(var(--ERROR))",
+        CRITICAL: "hsl(var(--CRITICAL))",
       },
       borderRadius: {
         lg: "var(--radius)",
