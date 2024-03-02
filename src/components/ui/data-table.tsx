@@ -46,16 +46,18 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
     initialState: {
-      pagination: { pageSize: 500 },
+      pagination: { pageSize: 1000 },
     },
   });
 
   const [levelFilter, setLevelFilter] = React.useState(() => [
     "TRACE",
     "DEBUG",
+    "INFO",
     "WARN",
     "ALERT",
     "ERROR",
+    "CRITICAL",
   ]);
 
   const handleLevelFilter = (newLevelFilters: string | string[]) => {
@@ -65,17 +67,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex justify-between items-center py-4">
-        <Input
-          placeholder="Filter by source..."
-          value={(table.getColumn("subject")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("subject")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex justify-between items-center py-2">
         <ToggleGroup
           type="multiple"
+          value={levelFilter}
           onValueChange={handleLevelFilter}
         >
           <ToggleGroupItem
@@ -89,6 +84,12 @@ export function DataTable<TData, TValue>({
             aria-label="Toggle DEBUG"
           >
             DEBUG
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="INFO"
+            aria-label="Toggle INFO"
+          >
+            INFO
           </ToggleGroupItem>
           <ToggleGroupItem
             value="WARN"
@@ -109,28 +110,43 @@ export function DataTable<TData, TValue>({
             ERROR
           </ToggleGroupItem>
         </ToggleGroup>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <span className="flex gap-1">
-            <div>Page</div>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount().toLocaleString()}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+        {table.getPageCount() > 1 && (
+          <div className="flex items-center justify-end space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <span className="flex gap-1">
+              <div>Page</div>
+              {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount().toLocaleString()}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-between items-center">
+        <Input
+          placeholder="Filter by source..."
+          value={(table.getColumn("subject")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("subject")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        {table.getPageCount() > 1 && (
           <div className="flex gap-1">
             {[...Array(table.getPageCount()).keys()].map((page) => (
               <Button
@@ -138,17 +154,25 @@ export function DataTable<TData, TValue>({
                 variant="outline"
                 size="sm"
                 onClick={() => table.setPageIndex(page)}
-                // className={cn({
-                //   "bg-primary text-white":
-                //     page === table.getState().pagination.pageIndex,
-                // })}
               >
                 {page + 1}
               </Button>
             ))}
           </div>
-        </div>
+        )}
       </div>
+      <div className="flex-1 text-sm text-muted-foreground">
+        showing{" "}
+        <strong>{1 + table.getState().pagination.pageIndex * 1000} </strong> to
+        <strong>
+          {" "}
+          {table.getRowModel().rows.length < 1000
+            ? table.getRowModel().rows.length
+            : (table.getState().pagination.pageIndex + 1) * 1000}{" "}
+        </strong>
+        of <strong>{table.getPreFilteredRowModel().rows.length}</strong>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -175,7 +199,11 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={"text-" + row.getValue("level")}
+                  className={
+                    row.getValue("level") == "CRITICAL"
+                      ? "bg-CRITICAL"
+                      : "text-" + row.getValue("level")
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
