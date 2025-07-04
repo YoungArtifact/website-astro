@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <a href="/">
+      <Button variant="bigGhost">
+        <ChevronRightIcon />
+      </Button>
+    </a>
+  </main>
+</Layout>

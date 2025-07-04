@@ -5,7 +5,7 @@
 @layer base {
 
   :root  {
-    --background: 89.3 19% 95%;
+    --background: url(../../public/favicon.svg);
     --foreground: 89.3 5% 10%;
 
     --card: 89.3 19% 90%;
